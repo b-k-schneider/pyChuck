@@ -25,4 +25,16 @@ You can run multiple Python scripts/threads. All will use the same Chuck VM.
 But you will see some messages due to an attempt to start a second Chuck VM.
 You typically ignore these messages, stuff works o.k. anyway, mostly.
 
+To Do:
+
+There is no location independence. All the .ck files MUST be in
+the directory you're running Python from. Chuck doesn't have a search path
+mechanism that I know of.
+An environment variable "ChuckPath" which is a full system directory path to
+ONE directory with all the .ck files in it does the job for me. There is no
+search path other than the degenerate case of JUST ONE SINGLE DIRECTORY
+for now. If you don't have ChuckPath defined in your environment but you have
+the .ck files in the directory where you invoke Python, you should still be o.k.
+Later, I may extend ChuckPath to be a real search path as in a list of
+directories to be searched for Chuck scripts
 # pyChuck

@@ -6,6 +6,12 @@ class server(threading.Thread):
 		self.p = None
 		self.srv = None
 		self.port = port
+		self.path = os.getenv('ChuckPath')
+		if self.path != None:
+			self.path = self.path.replace("\\", "\\\\")
+			self.path += "\\\\"
+			print "pyChuck:", self.path
+
 		threading.Thread.__init__(self)
 
 	def chuckPy(path, tags, args, source, s):
@@ -13,7 +19,10 @@ class server(threading.Thread):
 		print "chuckPy:", source, type(source)
 
 	def runChuck(self):
-		self.p = subprocess.Popen("chuck pyChuck.ck")
+		ck = "pyChuck.ck"
+		if self.path != None:
+			ck = self.path + ck
+		self.p = subprocess.Popen("chuck " + ck)
 		stat = None
 		for i in range(10):
 			time.sleep(1)
@@ -86,9 +95,12 @@ class pyChuck():
 	def shred(self, ck):
 		c = ck.split(",")
 		for cc in c:
+#			self.sndMsg(["shred", self.srv.path + "\\\\" + cc])
 			self.sndMsg(["shred", cc])
 
 	def sndMsg(self, q):
+		if q[0] == "shred" and self.srv.path != None:
+			q[1] = self.srv.path + "\\\\" + q[1]
 		self.cln.sndMsg(q)
 
 	def cleanup(self):
